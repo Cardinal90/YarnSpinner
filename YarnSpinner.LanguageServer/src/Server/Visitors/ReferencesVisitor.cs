@@ -35,6 +35,35 @@ namespace YarnLanguageServer
                 try
                 {
                     visitor.Visit(yarnFileData.ParseTree);
+                    foreach (var info in visitor.nodeInfos)
+                    {
+                        if (info.Jumps.Count == 0)
+                        { continue; }
+                        var newJumps = new List<NodeJump>();
+                        foreach (var jump in info.Jumps)
+                        {
+                            if (jump.DestinationToken == null)
+                            {
+                                var titleToken = visitor.nodeInfos.Find(_ => _.Title == jump.DestinationTitle)?.TitleToken;
+                                if (titleToken == null)
+                                { continue; }
+
+                                newJumps.Add(new NodeJump()
+                                {
+                                    DestinationTitle = jump.DestinationTitle,
+                                    DestinationToken = titleToken,
+                                });
+                            }
+                            else
+                            {
+                                newJumps.Add(jump);
+                            }
+                        }
+
+                        info.Jumps.Clear();
+                        info.Jumps.AddRange(newJumps);
+                    }
+
                     return visitor.nodeInfos;
                 }
                 catch (Exception)
@@ -42,6 +71,7 @@ namespace YarnLanguageServer
                     // Don't want an exception while parsing to take out the entire language server
                 }
             }
+
             return Enumerable.Empty<NodeInfo>();
         }
 
@@ -248,6 +278,15 @@ namespace YarnLanguageServer
             });
 
             CommonToken commandName = tokens.First();
+            if (commandName.Text == "activate")
+            {
+                var jump = new NodeJump
+                {
+                    DestinationTitle = tokens.Skip(1).Take(1).First().Text,
+                };
+
+                currentNodeInfo.Jumps.Add(jump);
+            }
 
             var parameterRangeStart = PositionHelper.GetRange(yarnFileData.LineStarts, commandName).End
                 .Delta(0, 1); // need at least one white space character after the command name before any parameters
