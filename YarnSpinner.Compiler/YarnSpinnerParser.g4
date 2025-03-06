@@ -12,7 +12,7 @@ file_hashtag
     ;
 
 node
-    : header+  BODY_START  body BODY_END
+    : (header | csharp_code_block)+  BODY_START  body BODY_END
     ;
 
 header 
@@ -33,6 +33,8 @@ statement
     | declare_statement
     | jump_statement
     | INDENT statement* DEDENT
+	| csharp_code_block
+	| csharp_condition_block
     ;
 
 line_statement
@@ -94,11 +96,11 @@ if_statement
     ;
 
 if_clause
-    : COMMAND_START COMMAND_IF expression COMMAND_END statement*
+    : COMMAND_START COMMAND_IF (csharp_condition_block | expression) COMMAND_END statement*
     ;
 
 else_if_clause
-    : COMMAND_START COMMAND_ELSEIF expression COMMAND_END statement*
+    : COMMAND_START COMMAND_ELSEIF (csharp_condition_block | expression) COMMAND_END statement*
     ;
 
 else_clause
@@ -135,4 +137,16 @@ declare_statement
 jump_statement
     : COMMAND_START COMMAND_JUMP destination=ID COMMAND_END #jumpToNodeName
     | COMMAND_START COMMAND_JUMP EXPRESSION_START expression EXPRESSION_END COMMAND_END #jumpToExpression
+    ;
+	
+csharp_code_content
+	: CSHARP_CODE_CHAR+?
+	;
+
+csharp_code_block
+	: CSHARP_CODE_START csharp_code_content CSHARP_CODE_END
+    ;
+
+csharp_condition_block
+	: CSHARP_CONDITION_START csharp_code_content CSHARP_CONDITION_END
     ;

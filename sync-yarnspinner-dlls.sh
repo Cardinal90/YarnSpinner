@@ -12,7 +12,7 @@ YARNSPINNER_UNITY_FOLDER=$1
 
 YARNSPINNER_FOLDER=.
 
-YARNSPINNER_DLLS_DIR=$1/Packages/dev.yarnspinner.unity/Runtime/DLLs/
+YARNSPINNER_DLLS_DIR=$1/Runtime/DLLs/
 
 if [ ! -d $YARNSPINNER_DLLS_DIR ]; then
     echo "Can't copy Yarn Spinner DLLS to $YARNSPINNER_DLLS_DIR because this directory does not exist"

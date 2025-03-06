@@ -59,6 +59,14 @@ HEADER_DELIMITER : ':' [ ]* -> pushMode(HeaderMode);
 // certain lines (see BODY_HASHTAG rule)
 HASHTAG : '#' -> pushMode(HashtagMode);
 
+CSHARP_CODE_START: '<%' -> pushMode(CSharpMode);
+// CSHARP_CONDITION_START: '<?' -> pushMode(CSharpMode);
+
+mode CSharpMode;
+CSHARP_CODE_END: '%>' -> popMode;
+CSHARP_CONDITION_END: '?>' -> popMode;
+CSHARP_CODE_CHAR: .;
+
 // Headers before a node.
 mode HeaderMode;
 // Allow arbitrary text up to the end of the line.
@@ -67,6 +75,9 @@ HEADER_NEWLINE : NEWLINE -> type(NEWLINE), channel(WHITESPACE), popMode;
 
 // The main body of a node.
 mode BodyMode;
+
+
+BODY_CSHARP_CODE_START:	CSHARP_CODE_START -> type(CSHARP_CODE_START), pushMode(CSharpMode);
 
 // Ignore all whitespace and comments
 BODY_WS : WS -> channel(HIDDEN);
@@ -191,6 +202,7 @@ HASHTAG_TEXT: ~[ \t\r\n#$<]+ -> popMode;
 
 // Expressions, involving values and operations on values.
 mode ExpressionMode;
+CSHARP_CONDITION_START: '<?' -> pushMode(CSharpMode);
 EXPR_WS : WS -> channel(HIDDEN);
 
 // Simple values

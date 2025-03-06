@@ -763,7 +763,7 @@ namespace Yarn.Compiler
         {
             VisitChildren(context);
             // If clauses are required to be boolean
-            var expressions = new[] { context.expression() };
+            var expressions = context.expression() != null ? new[] { context.expression() } : new ParserRuleContext[0];
             return CheckOperation(context, expressions, Operator.None, "if statement", BuiltinTypes.Boolean);
         }
 
@@ -771,7 +771,7 @@ namespace Yarn.Compiler
         {
             VisitChildren(context);
             // Else if clauses are required to be boolean
-            var expressions = new[] { context.expression() };
+            var expressions = context.expression() != null ? new[] { context.expression() } : new ParserRuleContext[0];
             return CheckOperation(context, expressions, Operator.None, "elseif statement", BuiltinTypes.Boolean);
         }
 
