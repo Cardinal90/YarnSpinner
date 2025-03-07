@@ -1,3 +1,5 @@
+// java org.antlr.v4.Tool -Dlanguage=CSharp ./YarnSpinner.Compiler/YarnSpinnerLexer.g4 ./YarnSpinner.Compiler/YarnSpinnerParser.g4 -o ./YarnSpinner.Compiler/ -package Yarn.Compiler -visitor -listener
+// antlr4.bat -Dlanguage=CSharp ./YarnSpinner.Compiler/YarnSpinnerLexer.g4 ./YarnSpinner.Compiler/YarnSpinnerParser.g4 -o ./YarnSpinner.Compiler/ -package Yarn.Compiler -visitor -listener
 parser grammar YarnSpinnerParser;
 
 options { tokenVocab=YarnSpinnerLexer; }
@@ -12,9 +14,12 @@ file_hashtag
     ;
 
 node
-    : (header | csharp_code_block)+  BODY_START  body BODY_END
+    : (header | variable_declaration | csharp_code_block)+  BODY_START  body BODY_END
     ;
 
+variable_declaration:
+	type=ID variable_name=ID (DECLARATION_ASSIGNMENT variable_value=REST_OF_LINE)?;
+	
 header 
     : header_key=ID HEADER_DELIMITER  header_value=REST_OF_LINE?
     ;

@@ -49,6 +49,8 @@ fragment IDENTIFIER_CHARACTER : [0-9]
 
 fragment IDENTIFIER_CHARACTERS : IDENTIFIER_CHARACTER+ ;
 
+DECLARATION_ASSIGNMENT: '=' [ ]* -> pushMode(HeaderMode);
+
 // The 'end of node headers, start of node body' marker
 BODY_START : '---' -> pushMode(BodyMode) ;
 

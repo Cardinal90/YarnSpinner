@@ -62,6 +62,16 @@ public interface IYarnSpinnerParserListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitNode([NotNull] YarnSpinnerParser.NodeContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="YarnSpinnerParser.variable_declaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterVariable_declaration([NotNull] YarnSpinnerParser.Variable_declarationContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="YarnSpinnerParser.variable_declaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitVariable_declaration([NotNull] YarnSpinnerParser.Variable_declarationContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="YarnSpinnerParser.header"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
