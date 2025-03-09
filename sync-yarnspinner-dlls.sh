@@ -1,4 +1,5 @@
 #!/bin/bash
+#./sync-yarnspinner-dlls.sh ../Rogue4x/Assets/Plugins/YarnSpinner/
 
 # Compiles, aliases, and copies the Yarn Spinner DLLs into a Yarn Spinner for
 # Unity project
@@ -20,8 +21,7 @@ if [ ! -d $YARNSPINNER_DLLS_DIR ]; then
 fi
 
 if [ -d .build-tmp ]; then 
-    echo "Can't build Yarn Spinner DLLs to .build-tmp because this directory already exists, and I don't want to overwrite it."
-    exit 1
+	rm -rf .build-tmp
 fi
 
 cd $YARNSPINNER_FOLDER
@@ -36,6 +36,8 @@ cp -v .build-tmp/*.dll $YARNSPINNER_DLLS_DIR
 cp -v .build-tmp/*.pdb $YARNSPINNER_DLLS_DIR
 cp -v .build-tmp/*.xml $YARNSPINNER_DLLS_DIR
 rm -fv $YARNSPINNER_DLLS_DIR/Microsoft.CSharp.dll
+rm -fv $YARNSPINNER_DLLS_DIR/YarnSpinner.Compiler.xml
+rm -fv $YARNSPINNER_DLLS_DIR/YarnSpinner.xml
 
 rm -rf .build-tmp
 

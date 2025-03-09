@@ -50,6 +50,7 @@ fragment IDENTIFIER_CHARACTER : [0-9]
 fragment IDENTIFIER_CHARACTERS : IDENTIFIER_CHARACTER+ ;
 
 DECLARATION_ASSIGNMENT: '=' [ ]* -> pushMode(HeaderMode);
+SEMICOLON: ';';
 
 // The 'end of node headers, start of node body' marker
 BODY_START : '---' -> pushMode(BodyMode) ;
@@ -62,11 +63,9 @@ HEADER_DELIMITER : ':' [ ]* -> pushMode(HeaderMode);
 HASHTAG : '#' -> pushMode(HashtagMode);
 
 CSHARP_CODE_START: '<%' -> pushMode(CSharpMode);
-// CSHARP_CONDITION_START: '<?' -> pushMode(CSharpMode);
 
 mode CSharpMode;
 CSHARP_CODE_END: '%>' -> popMode;
-CSHARP_CONDITION_END: '?>' -> popMode;
 CSHARP_CODE_CHAR: .;
 
 // Headers before a node.
@@ -204,7 +203,7 @@ HASHTAG_TEXT: ~[ \t\r\n#$<]+ -> popMode;
 
 // Expressions, involving values and operations on values.
 mode ExpressionMode;
-CSHARP_CONDITION_START: '<?' -> pushMode(CSharpMode);
+EXPRESSION_CSHARP_CODE_START: CSHARP_CODE_START -> type(CSHARP_CODE_START), pushMode(CSharpMode);
 EXPR_WS : WS -> channel(HIDDEN);
 
 // Simple values

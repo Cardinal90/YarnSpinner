@@ -18,7 +18,8 @@ node
     ;
 
 variable_declaration:
-	type=ID variable_name=ID (DECLARATION_ASSIGNMENT variable_value=REST_OF_LINE)?;
+	type=ID variable_name=ID ((DECLARATION_ASSIGNMENT variable_value=REST_OF_LINE) | SEMICOLON)?
+	;
 	
 header 
     : header_key=ID HEADER_DELIMITER  header_value=REST_OF_LINE?
@@ -39,7 +40,6 @@ statement
     | jump_statement
     | INDENT statement* DEDENT
 	| csharp_code_block
-	| csharp_condition_block
     ;
 
 line_statement
@@ -61,7 +61,7 @@ hashtag
     ;
 
 line_condition
-    : COMMAND_START COMMAND_IF expression COMMAND_END
+    : COMMAND_START COMMAND_IF csharp_condition_block COMMAND_END
     ;
 
 expression
@@ -153,5 +153,5 @@ csharp_code_block
     ;
 
 csharp_condition_block
-	: CSHARP_CONDITION_START csharp_code_content CSHARP_CONDITION_END
+	: CSHARP_CODE_START csharp_code_content CSHARP_CODE_END
     ;
